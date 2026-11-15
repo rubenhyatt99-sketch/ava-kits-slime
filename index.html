@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr" data-motion="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Labo d'Ava</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --night:#13052B; --night2:#1F0B47; --glass:rgba(255,255,255,.08); --line:rgba(255,255,255,.22);
+  --text:#FFF6FF; --soft:#D9C6F5;
+  --pink:#FF5CA3; --violet:#C55DFF; --blue:#3CD5FF; --mint:#7EEDD5; --yellow:#FFE459; --ink:#2B1250;
+  --display:'Bagel Fat One','Fredoka',ui-rounded,system-ui,sans-serif;
+  --body:'Fredoka',ui-rounded,system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:#0B021C;color:var(--text);font-family:var(--body);font-weight:500;line-height:1.4}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+[hidden]{display:none!important}
+
+.app{position:relative;max-width:480px;min-height:100vh;margin:0 auto;overflow:hidden;background:radial-gradient(120% 60% at 50% 0%,#3B1280 0%,var(--night2) 45%,var(--night) 100%)}
+.z{position:relative;z-index:2}
+
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,60px) scale(1.25)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1.1)}50%{transform:translate(-50px,40px) scale(.85)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes holo{from{background-position:0 50%}to{background-position:300% 50%}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+@keyframes pop{0%{transform:scale(.9) translateY(18px)}60%{transform:scale(1.03)}100%{transform:scale(1) translateY(0)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}
+@keyframes trail{to{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+@keyframes glow{0%,100%{box-shadow:0 0 18px rgba(255,92,163,.55),0 0 0 3px var(--pink)}50%{box-shadow:0 0 34px rgba(60,213,255,.75),0 0 0 3px var(--blue)}}
+@keyframes wob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes eq{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+@keyframes slideUp{from{transform:translateY(130%)}to{transform:translateY(0)}}
+html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *::after{animation:none!important;transition:none!important}
+html[data-motion=off]{scroll-behavior:auto}
+
+.aurora{position:absolute;inset:0 0 auto 0;height:760px;pointer-events:none;z-index:0}
+.blob{position:absolute;border-radius:50%;filter:blur(46px);opacity:.75;will-change:transform}
+.b1{width:280px;height:280px;left:-70px;top:70px;background:var(--pink);animation:drift1 11s ease-in-out infinite}
+.b2{width:260px;height:260px;right:-80px;top:230px;background:var(--blue);animation:drift2 13s ease-in-out infinite}
+.b3{width:220px;height:220px;left:30%;top:470px;background:var(--violet);animation:drift1 15s ease-in-out -4s infinite}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 0}
+.handle{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+.handle img{width:40px;height:40px;border-radius:50%;border:2px solid var(--line)}
+
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 20px 8px}
+.orb{position:relative;width:236px;height:236px;display:grid;place-items:center;animation:floaty 6s ease-in-out infinite}
+.orb::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,var(--pink),var(--yellow),var(--mint),var(--blue),var(--violet),var(--pink));animation:spin 6s linear infinite;filter:blur(1px)}
+.orb::after{content:"";position:absolute;inset:-18px;border-radius:50%;background:conic-gradient(from 90deg,var(--pink),transparent 30%,var(--blue),transparent 70%,var(--pink));opacity:.5;filter:blur(18px);animation:spin 9s linear infinite reverse}
+.orb button{position:relative;z-index:1;width:212px;height:212px;border-radius:50%;border:6px solid var(--night);padding:0;overflow:hidden;background:none;cursor:pointer}
+.orb img{display:block;width:100%;height:100%;object-fit:cover}
+.chip{margin-top:22px;display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;border:2px solid var(--line);background:var(--glass);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 var(--mint);animation:pulse 1.6s ease-out infinite}
+.hero h1{margin-top:14px;font-size:54px;line-height:.98;background:linear-gradient(90deg,var(--pink),var(--yellow),var(--mint),var(--blue),var(--violet),var(--pink));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:holo 7s linear infinite;filter:drop-shadow(0 4px 0 rgba(0,0,0,.35))}
+.hero .lead{margin-top:14px;max-width:330px;font-size:18px;color:var(--soft)}
+.actions{margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:58px;padding:0 30px;border-radius:999px;border:0;text-decoration:none;font-family:var(--display);font-size:22px;color:var(--ink);cursor:pointer;background:linear-gradient(90deg,var(--yellow),var(--pink),var(--yellow));background-size:200% 100%;animation:holo 4s linear infinite,glow 3s ease-in-out infinite;transition:transform .2s ease-out}
+.btn:hover{transform:translateY(-3px) scale(1.03)}
+.btn:active{transform:scale(.96)}
+.ghost{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 20px;border-radius:999px;border:2px solid var(--line);background:var(--glass);color:var(--text);font-weight:600;font-size:16px;text-decoration:none}
+.fine{font-size:14px;color:var(--soft)}
+
+.band{margin-top:26px;overflow:hidden;border-block:2px solid var(--line);background:rgba(255,255,255,.04)}
+.track{display:flex;width:max-content;animation:marquee 22s linear infinite}
+.grp{display:flex;align-items:center;gap:20px;padding:12px 10px;font-family:var(--display);font-size:34px;white-space:nowrap;color:transparent;-webkit-text-stroke:1.5px var(--text)}
+.grp svg{width:22px;height:22px;flex:none}
+
+section{padding:36px 18px 4px}
+h2{font-size:34px;line-height:1.05}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
+.sec-head{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.reveal.in{animation:pop .7s cubic-bezier(.34,1.56,.64,1) both}
+
+.video{position:relative;aspect-ratio:9/14;width:min(72%,260px);margin-inline:auto;border-radius:30px;overflow:hidden;border:2px solid var(--line);background:radial-gradient(90% 70% at 50% 40%,#4A1A96 0%,#220A55 60%,#12062E 100%);box-shadow:0 0 0 4px rgba(197,93,255,.25),0 24px 60px rgba(0,0,0,.5)}
+.video video{object-position:50% 100%;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#220A55}
+.snd{position:absolute;top:14px;left:50%;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);font-weight:600;font-size:14px;white-space:nowrap;border:0;color:var(--text);min-height:44px;cursor:pointer}
+.video.heard .snd{display:none}
+.play{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;border:0;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.45)}
+.play::before{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #fff;animation:pulse 1.8s ease-out infinite}
+.play svg{width:38px;height:38px;margin-left:5px}
+.ctrl{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:20px;background:rgba(10,2,30,.62);backdrop-filter:blur(8px)}
+.ctrl button{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:var(--glass);color:var(--text);display:grid;place-items:center;cursor:pointer}
+.ctrl button svg{width:22px;height:22px}
+.seek{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden}
+.seek i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--blue))}
+.time{flex:none;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.video.playing .play{display:none}
+.types{display:flex;flex-wrap:wrap;gap:8px}
+.types input{position:absolute;opacity:0;width:1px;height:1px}
+.types label{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;border:2px solid var(--line);background:rgba(255,255,255,.07);font-weight:600;font-size:16px;cursor:pointer}
+.types input:checked+label{background:var(--yellow);border-color:var(--yellow);color:var(--ink)}
+.types input:focus-visible+label{outline:3px solid var(--mint);outline-offset:3px}
+.card .tex{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:700;color:var(--ink)}
+
+.gauge{display:flex;align-items:center;gap:18px;padding:18px;border-radius:28px;border:2px solid var(--line);background:var(--glass)}
+.ring{position:relative;flex:none;width:108px;height:108px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:11;stroke-linecap:round}
+.ring .bg{stroke:rgba(255,255,255,.15)}
+.ring .fg{stroke:url(#grad);stroke-dasharray:314;stroke-dashoffset:314;transition:stroke-dashoffset 1.1s cubic-bezier(.34,1.56,.64,1)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:30px;font-weight:400;font-variant-numeric:tabular-nums}
+.gauge h2{font-size:26px}
+.gauge p{margin-top:4px;color:var(--soft);font-size:15px}
+
+.rail{display:flex;gap:14px;margin:0 -18px;padding:6px 18px 18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.card{flex:0 0 200px;scroll-snap-align:center;padding:2px;border-radius:28px;background:linear-gradient(135deg,var(--pink),var(--blue),var(--mint),var(--violet));background-size:300% 300%;animation:holo 6s linear infinite}
+.card>div{height:100%;padding:22px 16px;border-radius:26px;background:linear-gradient(180deg,#2A0F5E,#1A0A3E);text-align:center}
+.card svg{width:76px;height:76px;animation:floaty 4s ease-in-out infinite}
+.card:nth-child(2) svg{animation-delay:.6s}.card:nth-child(3) svg{animation-delay:1.2s}.card:nth-child(4) svg{animation-delay:1.8s}
+.card h3{margin-top:10px;font-size:24px}
+.card p{margin-top:4px;font-size:15px;color:var(--soft)}
+.hint{display:flex;align-items:center;justify-content:flex-end;gap:6px;font-size:14px;color:var(--soft)}
+.hint svg{width:22px;height:22px;animation:nudge 1.4s ease-in-out infinite}
+
+.path{position:relative;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:18px}
+.path::before{content:"";position:absolute;left:25px;top:10px;bottom:10px;width:4px;border-radius:4px;background:linear-gradient(var(--pink),var(--yellow),var(--mint),var(--blue));background-size:100% 300%;animation:holo 5s linear infinite;box-shadow:0 0 14px var(--violet)}
+.path li{position:relative;display:flex;gap:16px;align-items:center}
+.n{flex:none;position:relative;z-index:1;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:26px;color:var(--ink);box-shadow:0 0 0 5px var(--night2),0 0 22px currentColor}
+.path b{display:block;font-family:var(--display);font-weight:400;font-size:22px}
+.path span{color:var(--soft);font-size:15px}
+
+.formbox{padding:2px;border-radius:32px;background:linear-gradient(135deg,var(--pink),var(--yellow),var(--mint),var(--blue),var(--violet));background-size:300% 300%;animation:holo 6s linear infinite}
+.formbox>div{padding:24px 18px 26px;border-radius:30px;background:#1A0A3E}
+.formbox h2{text-align:center}
+.sub{margin-top:8px;text-align:center;color:var(--soft)}
+.fields{margin-top:18px;display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.lab{font-weight:600;font-size:16px}
+.field input[type=text],.field input[type=email]{min-height:54px;border-radius:18px;border:2px solid var(--line);background:rgba(255,255,255,.07);padding:0 16px;font:inherit;font-size:18px;color:var(--text)}
+.field input[aria-invalid=true]{border-color:#FF7A9F;background:rgba(255,92,163,.14)}
+.err{font-size:14px;font-weight:600;color:#FFA6C2}
+.qty{display:flex;align-items:center;gap:14px}
+.qty button{width:52px;height:52px;border-radius:50%;border:0;background:var(--mint);color:var(--ink);font:inherit;font-size:30px;font-weight:700;line-height:1;cursor:pointer;transition:transform .15s}
+.qty button:active{transform:scale(.86)}
+.qty output{min-width:40px;text-align:center;font-family:var(--display);font-size:34px;font-variant-numeric:tabular-nums}
+.consent{display:flex;gap:10px;align-items:flex-start}
+.consent input{flex:0 0 26px;width:26px;height:26px;margin:2px 0 0;accent-color:var(--pink)}
+.consent label{font-size:14px;font-weight:500;color:var(--soft)}
+.go{min-height:60px;border:0;border-radius:999px;font-family:var(--display);font-size:24px;color:var(--ink);cursor:pointer;background:linear-gradient(90deg,var(--pink),var(--yellow),var(--pink));background-size:200% 100%;animation:holo 4s linear infinite;transition:transform .2s}
+.go:active{transform:scale(.96)}
+.thanks{margin-top:20px;text-align:center}
+.thanks svg{width:80px;height:80px;animation:pop .6s cubic-bezier(.34,1.56,.64,1) both}
+.thanks h3{margin-top:10px;font-size:32px}
+.thanks p{margin-top:8px;color:var(--soft)}
+
+.faq{display:flex;flex-direction:column;gap:12px}
+details{border-radius:22px;border:2px solid var(--line);background:var(--glass);padding:0 16px}
+summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:56px;font-weight:600;font-size:17px;cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";flex:none;width:12px;height:12px;border-right:3px solid var(--mint);border-bottom:3px solid var(--mint);transform:rotate(45deg);transition:transform .25s}
+details[open] summary::after{transform:rotate(225deg)}
+details p{padding:0 0 14px;color:var(--soft);font-size:15px}
+
+footer{padding:34px 20px 120px;text-align:center}
+footer img{width:64px;height:64px;border-radius:50%;border:2px solid var(--line)}
+footer .h{margin-top:10px;font-family:var(--display);font-size:24px}
+footer p{margin-top:4px;color:var(--soft);font-size:14px}
+
+.sticky{position:fixed;left:50%;bottom:14px;z-index:30;width:min(452px,calc(100% - 28px));transform:translateX(-50%)}
+.sticky .btn{width:100%;animation:holo 4s linear infinite,glow 3s ease-in-out infinite,slideUp .4s ease-out both}
+
+.dot{position:fixed;z-index:40;width:10px;height:10px;border-radius:50%;pointer-events:none;animation:trail .7s ease-out forwards}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<linearGradient id="grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF5CA3"/><stop offset=".5" stop-color="#FFE459"/><stop offset="1" stop-color="#3CD5FF"/></linearGradient>
+</defs>
+</svg>
+
+<div class="app" id="app">
+<div class="aurora" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+
+<div class="z">
+<div class="top">
+<div class="handle"><img src="assets/ava-logo.webp" alt="" width="40" height="40"><span>@ava.kitsdeslime</span></div>
+</div>
+
+<main>
+<header class="hero">
+<div class="orb"><button id="orbBtn" type="button" aria-label="Logo d'Ava : touche pour faire des étincelles"><img src="assets/ava-logo.webp" alt="Logo Ava, Les Kits de Slime" width="212" height="212"></button></div>
+<span class="chip"><i></i>Précommande ouverte</span>
+<h1>Le labo d'Ava</h1>
+<p class="lead">Des kits de slime à mélanger. Tout est pré-dosé, brillant et prêt à s'étirer.</p>
+<div class="actions">
+<a class="btn" id="heroCta" href="#reserver">Je réserve mon kit</a>
+<a class="ghost" href="#asmr"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>Écouter le slime</a>
+<p class="fine">Gratuit, sans paiement maintenant</p>
+</div>
+</header>
+
+<div class="band" aria-hidden="true"><div class="track" id="track"><div class="grp">
+<span>ÉTIRE</span><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="#FF5CA3"/></svg>
+<span>MÉLANGE</span><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="#3CD5FF"/></svg>
+<span>BRILLE</span><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="#FFE459"/></svg>
+<span>SQUISH</span><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="#7EEDD5"/></svg>
+</div></div></div>
+
+<section id="asmr" aria-labelledby="t-asmr">
+<div class="sec-head"><span class="kicker">Regarde</span><h2 id="t-asmr">Le son du slime</h2></div>
+<div class="video reveal" id="video" role="group" aria-label="Vidéo de manipulation de slime">
+<video id="vid" src="assets/slime.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Mains qui étirent un slime à paillettes"></video>
+<button class="snd" id="sndHint" type="button">Touche pour le son</button>
+<button class="play" id="playBig" type="button" aria-label="Lancer la vidéo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg></button>
+<div class="ctrl">
+<button id="playBtn" type="button" aria-label="Pause"><svg id="icoPlay" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg><svg id="icoPause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg></button>
+<div class="seek" aria-hidden="true"><i id="seekFill"></i></div>
+<span class="time" id="time">0:00 / 0:08</span>
+<button id="soundBtn" type="button" aria-label="Son coupé" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path id="waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" hidden/></svg></button>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="t-jauge">
+<div class="gauge reveal">
+<div class="ring"><svg viewBox="0 0 108 108" aria-hidden="true"><circle class="bg" cx="54" cy="54" r="50"/><circle class="fg" id="ringFg" cx="54" cy="54" r="50"/></svg><b id="ringNum">0</b></div>
+<div><h2 id="t-jauge">1re fournée</h2><p id="gaugeTxt" role="status">0 / 10 kits réservés. On lance à 10.</p></div>
+</div>
+</section>
+
+<section aria-labelledby="t-kit">
+<div class="sec-head"><span class="kicker">Choisis ta texture</span><h2 id="t-kit">Les slimes du moment</h2></div>
+<div class="rail" tabindex="0" aria-label="Types de slime, fais défiler">
+<div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M14 36a9 9 0 0 1-1-17.9A11 11 0 0 1 34 15a9 9 0 0 1 1 18z" fill="#FFB3D9" stroke="#2B1250" stroke-width="3" stroke-linejoin="round"/></svg><h3>Fluffy</h3><p>Léger et moelleux, comme un nuage</p><span class="tex" style="background:#FF5CA3">Fluffy</span></div></div>
+<div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><rect x="8" y="16" width="32" height="22" rx="8" fill="#FFE459" stroke="#2B1250" stroke-width="3"/><path d="M14 24h20" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg><h3>Butter</h3><p>Doux et lisse, il s'étale comme du beurre</p><span class="tex" style="background:#FFE459">Butter</span></div></div>
+<div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M24 5C24 5 11 20 11 30a13 13 0 0 0 26 0C37 20 24 5 24 5z" fill="#BFF1FF" stroke="#2B1250" stroke-width="3" stroke-linejoin="round"/><path d="M18 30a6 6 0 0 0 5 6" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/></svg><h3>Clear</h3><p>Transparent et brillant comme du verre</p><span class="tex" style="background:#3CD5FF">Clear</span></div></div>
+<div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="16" cy="18" r="6" fill="#7EEDD5" stroke="#2B1250" stroke-width="3"/><circle cx="32" cy="16" r="6" fill="#FF5CA3" stroke="#2B1250" stroke-width="3"/><circle cx="24" cy="30" r="6" fill="#FFE459" stroke="#2B1250" stroke-width="3"/><circle cx="35" cy="34" r="5" fill="#3CD5FF" stroke="#2B1250" stroke-width="3"/><circle cx="12" cy="35" r="5" fill="#C55DFF" stroke="#2B1250" stroke-width="3"/></svg><h3>Crunchy</h3><p>Avec des perles qui croustillent</p><span class="tex" style="background:#7EEDD5">Crunchy</span></div></div>
+<div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M24 4l5 14 14 6-14 6-5 14-5-14-14-6 14-6z" fill="#C55DFF" stroke="#2B1250" stroke-width="3" stroke-linejoin="round"/></svg><h3>Galaxy</h3><p>Plein de paillettes qui brillent</p><span class="tex" style="background:#C55DFF">Galaxy</span></div></div>
+<div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M12 40V22a12 12 0 0 1 24 0v18z" fill="#FF8FC4" stroke="#2B1250" stroke-width="3" stroke-linejoin="round"/><circle cx="19" cy="22" r="2.5" fill="#fff"/></svg><h3>Jelly</h3><p>Gélatineux, il rebondit sous les doigts</p><span class="tex" style="background:#FF5CA3">Jelly</span></div></div>
+</div>
+<div class="hint"><span>Glisse</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</section>
+
+<section aria-labelledby="t-how">
+<div class="sec-head"><span class="kicker">3 étapes</span><h2 id="t-how">Comment ça marche</h2></div>
+<ol class="path">
+<li class="reveal"><span class="n" style="background:var(--pink);color:var(--ink)">1</span><div><b>Tu réserves</b><span>Gratuit, en 30 secondes.</span></div></li>
+<li class="reveal"><span class="n" style="background:var(--yellow);color:var(--ink)">2</span><div><b>On lance à 10 kits</b><span>On te prévient par e-mail.</span></div></li>
+<li class="reveal"><span class="n" style="background:var(--mint);color:var(--ink)">3</span><div><b>Tu mélanges</b><span>Tout est pré-dosé, c'est parti.</span></div></li>
+</ol>
+</section>
+
+<section id="reserver" aria-labelledby="t-form">
+<div class="formbox reveal"><div>
+<h2 id="t-form">Réserve ton kit</h2>
+<p class="sub">14,99 € le kit. Tu ne paies rien maintenant.</p>
+<form id="form" class="fields" novalidate>
+<div class="field"><label for="prenom">Ton prénom</label><input id="prenom" type="text" autocomplete="given-name" aria-describedby="e-prenom"><span class="err" id="e-prenom" aria-live="polite"></span></div>
+<div class="field"><label for="email">Ton e-mail (ou celui d'un parent)</label><input id="email" type="email" autocomplete="email" inputmode="email" aria-describedby="e-email"><span class="err" id="e-email" aria-live="polite"></span></div>
+<div class="field"><span class="lab" id="lab-type">Ton type de slime</span><div class="types" role="radiogroup" aria-labelledby="lab-type"><input type="radio" name="type" id="t-fluffy" value="Fluffy" checked><label for="t-fluffy">Fluffy</label><input type="radio" name="type" id="t-butter" value="Butter"><label for="t-butter">Butter</label><input type="radio" name="type" id="t-clear" value="Clear"><label for="t-clear">Clear</label><input type="radio" name="type" id="t-crunchy" value="Crunchy"><label for="t-crunchy">Crunchy</label><input type="radio" name="type" id="t-galaxy" value="Galaxy"><label for="t-galaxy">Galaxy</label><input type="radio" name="type" id="t-jelly" value="Jelly"><label for="t-jelly">Jelly</label></div></div>
+<div class="field"><span class="lab" id="lab-qty">Nombre de kits</span><div class="qty" role="group" aria-labelledby="lab-qty"><button type="button" id="minus" aria-label="Retirer un kit">−</button><output id="qty" aria-live="polite">1</output><button type="button" id="plus" aria-label="Ajouter un kit">+</button></div></div>
+<div class="field"><div class="consent"><input id="ok" type="checkbox" aria-describedby="e-ok"><label for="ok">J'accepte d'être contacté(e) par e-mail au sujet de ma réservation. Mes données ne servent qu'à ça.</label></div><span class="err" id="e-ok" aria-live="polite"></span></div>
+<button class="go" type="submit">Je réserve</button>
+</form>
+<div class="thanks" id="thanks" hidden>
+<svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#7EEDD5"/><path d="M14 25l7 7 13-15" fill="none" stroke="#2B1250" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<h3>C'est réservé !</h3><p id="thanksTxt">On t'écrit dès que la 1re fournée est lancée. Parle-en à tes copines et copains.</p>
+</div>
+</div></div>
+</section>
+
+<section aria-labelledby="t-faq">
+<div class="sec-head"><span class="kicker">FAQ</span><h2 id="t-faq">Questions</h2></div>
+<div class="faq">
+<details><summary>Qu'y a-t-il dans le kit ?</summary><p>Colle, mousse à raser, bicarbonate et activateur pré-dosés, avec des paillettes et des colorants. Pas de perles.</p></details>
+<details><summary>Je dois payer maintenant ?</summary><p>Non. Tu réserves gratuitement. On te prévient quand les 10 kits sont atteints.</p></details>
+<details><summary>Pour quel âge ?</summary><p>À partir de 6 ans.</p></details>
+</div>
+</section>
+</main>
+
+<footer><img src="assets/ava-logo.webp" alt="" width="64" height="64"><div class="h">@ava.kitsdeslime</div><p>Suis Ava sur Instagram</p></footer>
+</div>
+
+<div class="sticky" id="sticky" hidden><a class="btn" href="#reserver">Je réserve mon kit</a></div>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var COLORS = ['#FF5CA3','#C55DFF','#3CD5FF','#7EEDD5','#FFE459'];
+  function on(){ return root.getAttribute('data-motion') !== 'off'; }
+  function setMotion(v){
+    root.setAttribute('data-motion', v ? 'on' : 'off');
+    var vv = document.getElementById('vid');
+    if (vv) { if (v) { var p = vv.play(); if (p && p.catch) p.catch(function(){}); } else vv.pause(); }
+  }
+
+  var track = document.getElementById('track');
+  for (var k = 0; k < 3; k++) track.appendChild(track.firstElementChild.cloneNode(true));
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: .2 });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  }
+
+  var blobs = document.querySelectorAll('.blob');
+  window.addEventListener('scroll', function(){
+    if (!on()) return;
+    var y = window.scrollY;
+    blobs.forEach(function(b, i){ b.style.marginTop = (-y * (0.08 + i * 0.05)) + 'px'; });
+  }, { passive: true });
+
+  var last = 0;
+  window.addEventListener('pointermove', function(e){
+    if (!on()) return;
+    var n = performance.now(); if (n - last < 45) return; last = n;
+    var d = document.createElement('span');
+    d.className = 'dot';
+    d.style.left = e.clientX - 5 + 'px'; d.style.top = e.clientY - 5 + 'px';
+    d.style.background = COLORS[Math.floor(Math.random() * 5)];
+    d.style.setProperty('--tx', (Math.random() * 40 - 20) + 'px');
+    d.style.setProperty('--ty', (Math.random() * 40 + 10) + 'px');
+    document.body.appendChild(d);
+    setTimeout(function(x){ x.remove(); }, 750, d);
+  }, { passive: true });
+
+  function burst(x, y, n){
+    if (!on()) return;
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('span'), a = Math.PI * 2 * i / n, r = 50 + Math.random() * 60;
+      d.className = 'dot';
+      d.style.left = x - 5 + 'px'; d.style.top = y - 5 + 'px';
+      d.style.width = d.style.height = (8 + Math.random() * 8) + 'px';
+      d.style.background = COLORS[i % 5];
+      d.style.setProperty('--tx', Math.cos(a) * r + 'px'); d.style.setProperty('--ty', Math.sin(a) * r + 'px');
+      document.body.appendChild(d);
+      setTimeout(function(e){ e.remove(); }, 750, d);
+    }
+  }
+  document.getElementById('orbBtn').addEventListener('click', function(e){
+    var r = e.currentTarget.getBoundingClientRect();
+    burst(e.clientX || r.left + r.width / 2, e.clientY || r.top + r.height / 2, 14);
+  });
+  document.querySelectorAll('.btn,.go,.play').forEach(function(el){
+    el.addEventListener('pointerdown', function(e){ burst(e.clientX, e.clientY, 8); });
+  });
+
+  var video = document.getElementById('video'), vid = document.getElementById('vid');
+  var sBtn = document.getElementById('soundBtn');
+  function fmt(s){ s = Math.floor(s || 0); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+  function ui(){
+    var playing = !vid.paused;
+    video.classList.toggle('playing', playing);
+    document.getElementById('icoPlay').toggleAttribute('hidden', playing);
+    document.getElementById('icoPause').toggleAttribute('hidden', !playing);
+    document.getElementById('playBtn').setAttribute('aria-label', playing ? 'Pause' : 'Lecture');
+    var d = vid.duration || 8;
+    document.getElementById('seekFill').style.width = (vid.currentTime / d * 100) + '%';
+    document.getElementById('time').textContent = fmt(vid.currentTime) + ' / ' + fmt(d);
+  }
+  ['timeupdate','play','pause','loadedmetadata'].forEach(function(ev){ vid.addEventListener(ev, ui); });
+  function tryPlay(){ var p = vid.play(); if (p && p.catch) p.catch(function(){}); }
+  document.getElementById('playBig').addEventListener('click', function(){ if (!on()) setMotion(true); tryPlay(); });
+  document.getElementById('playBtn').addEventListener('click', function(){ if (vid.paused) { if (!on()) setMotion(true); tryPlay(); } else vid.pause(); });
+  function setSound(v){
+    vid.muted = !v;
+    sBtn.setAttribute('aria-pressed', v ? 'true' : 'false');
+    sBtn.setAttribute('aria-label', v ? 'Son activé' : 'Son coupé');
+    document.getElementById('waves').toggleAttribute('hidden', !v);
+    if (v) { video.classList.add('heard'); if (vid.paused) tryPlay(); }
+  }
+  sBtn.addEventListener('click', function(){ setSound(vid.muted); });
+  document.getElementById('sndHint').addEventListener('click', function(){ setSound(true); });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(e){
+      if (!on()) return;
+      if (e[0].isIntersecting) tryPlay(); else vid.pause();
+    }, { threshold: .35 }).observe(video);
+  }
+
+  var qty = 1, qEl = document.getElementById('qty'), reserved = 0;
+  function setQty(v){ qty = Math.max(1, Math.min(10, v)); qEl.textContent = qty; }
+  document.getElementById('minus').addEventListener('click', function(){ setQty(qty - 1); });
+  document.getElementById('plus').addEventListener('click', function(){ setQty(qty + 1); });
+  function showCount(){
+    var n = Math.min(10, reserved);
+    document.getElementById('ringNum').textContent = n;
+    document.getElementById('ringFg').style.strokeDashoffset = 314 - 314 * n / 10;
+    document.getElementById('gaugeTxt').textContent = n + ' / 10 kits réservés. On lance à 10.';
+  }
+  showCount();
+
+  var form = document.getElementById('form');
+  function setErr(id, inp, msg){ document.getElementById(id).textContent = msg; document.getElementById(inp).setAttribute('aria-invalid', msg ? 'true' : 'false'); }
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var bad = null;
+    var p = document.getElementById('prenom').value.trim(), m = document.getElementById('email').value.trim(), c = document.getElementById('ok').checked;
+    setErr('e-prenom', 'prenom', p ? '' : 'Écris ton prénom pour continuer.'); if (!p) bad = bad || 'prenom';
+    var mo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m);
+    setErr('e-email', 'email', mo ? '' : 'Vérifie ton e-mail, il ressemble à nom@exemple.fr.'); if (!mo) bad = bad || 'email';
+    setErr('e-ok', 'ok', c ? '' : 'Coche la case pour recevoir des nouvelles de ta réservation.'); if (!c) bad = bad || 'ok';
+    if (bad) { document.getElementById(bad).focus(); return; }
+    reserved += qty; showCount();
+    var tp = document.querySelector('input[name=type]:checked'); document.getElementById('thanksTxt').textContent = 'Kit ' + (tp ? tp.value : '') + ' x' + qty + ' noté. On t’écrit dès que la 1re fournée est lancée. Parle-en à tes copines et copains.';
+    form.hidden = true; document.getElementById('thanks').hidden = false;
+    confetti();
+  });
+
+  function confetti(){
+    if (!on()) return;
+    var c = document.getElementById('confetti'), g = c.getContext('2d');
+    var w = c.width = innerWidth, h = c.height = innerHeight, ps = [];
+    for (var i = 0; i < 120; i++) ps.push({ x: w / 2 + (Math.random() - .5) * 60, y: h * .6, vx: (Math.random() - .5) * 15, vy: -(7 + Math.random() * 12), r: 5 + Math.random() * 7, c: COLORS[i % 5], a: 0, va: (Math.random() - .5) * .4, round: Math.random() > .5 });
+    var s = performance.now();
+    (function f(t){
+      g.clearRect(0, 0, w, h); var alive = false;
+      ps.forEach(function(p){
+        p.vy += .38; p.x += p.vx; p.y += p.vy; p.a += p.va; p.vx *= .99; if (p.y < h + 20) alive = true;
+        g.save(); g.translate(p.x, p.y); g.rotate(p.a); g.fillStyle = p.c;
+        if (p.round) { g.beginPath(); g.arc(0, 0, p.r, 0, 6.3); g.fill(); } else g.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+        g.restore();
+      });
+      if (alive && t - s < 4000) requestAnimationFrame(f); else g.clearRect(0, 0, w, h);
+    })(s);
+  }
+
+  var sticky = document.getElementById('sticky'), seen = { hero: true, form: false };
+  function upd(){ sticky.hidden = seen.hero || seen.form; }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(e){ seen.hero = e[0].isIntersecting; upd(); }).observe(document.getElementById('heroCta'));
+    new IntersectionObserver(function(e){ seen.form = e[0].isIntersecting; upd(); }).observe(document.getElementById('reserver'));
+  }
+
+  setMotion(true);
+  ui();
+})();
+</script>
+</body>
+</html>
