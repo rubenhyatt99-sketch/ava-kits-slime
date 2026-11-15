@@ -261,6 +261,7 @@ footer p{margin-top:4px;color:var(--soft);font-size:14px}
 <h2 id="t-form">Réserve ton kit</h2>
 <p class="sub">14,99 € le kit. Tu ne paies rien maintenant.</p>
 <form id="form" class="fields" novalidate>
+<input id="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0">
 <div class="field"><label for="prenom">Ton prénom</label><input id="prenom" type="text" autocomplete="given-name" aria-describedby="e-prenom"><span class="err" id="e-prenom" aria-live="polite"></span></div>
 <div class="field"><label for="email">Ton e-mail (ou celui d'un parent)</label><input id="email" type="email" autocomplete="email" inputmode="email" aria-describedby="e-email"><span class="err" id="e-email" aria-live="polite"></span></div>
 <div class="field"><span class="lab" id="lab-type">Ton type de slime</span><div class="types" role="radiogroup" aria-labelledby="lab-type"><input type="radio" name="type" id="t-fluffy" value="Fluffy" checked><label for="t-fluffy">Fluffy</label><input type="radio" name="type" id="t-butter" value="Butter"><label for="t-butter">Butter</label><input type="radio" name="type" id="t-clear" value="Clear"><label for="t-clear">Clear</label><input type="radio" name="type" id="t-crunchy" value="Crunchy"><label for="t-crunchy">Crunchy</label><input type="radio" name="type" id="t-galaxy" value="Galaxy"><label for="t-galaxy">Galaxy</label><input type="radio" name="type" id="t-jelly" value="Jelly"><label for="t-jelly">Jelly</label></div></div>
@@ -399,6 +400,7 @@ footer p{margin-top:4px;color:var(--soft);font-size:14px}
     document.getElementById('gaugeTxt').textContent = n + ' / 10 kits réservés. On lance à 10.';
   }
   showCount();
+  fetch('/api/count').then(function(r){return r.json();}).then(function(d){ if (d && typeof d.kits==='number'){ reserved=d.kits; showCount(); } }).catch(function(){});
 
   var form = document.getElementById('form');
   function setErr(id, inp, msg){ document.getElementById(id).textContent = msg; document.getElementById(inp).setAttribute('aria-invalid', msg ? 'true' : 'false'); }
@@ -411,11 +413,18 @@ footer p{margin-top:4px;color:var(--soft);font-size:14px}
     setErr('e-email', 'email', mo ? '' : 'Vérifie ton e-mail, il ressemble à nom@exemple.fr.'); if (!mo) bad = bad || 'email';
     setErr('e-ok', 'ok', c ? '' : 'Coche la case pour recevoir des nouvelles de ta réservation.'); if (!c) bad = bad || 'ok';
     if (bad) { document.getElementById(bad).focus(); return; }
-    reserved += qty; showCount();
-    var tp = document.querySelector('input[name=type]:checked'); document.getElementById('thanksTxt').textContent = 'Kit ' + (tp ? tp.value : '') + ' x' + qty + ' noté. On t’écrit dès que la 1re fournée est lancée. Parle-en à tes copines et copains.';
+    var tp = document.querySelector('input[name=type]:checked'), btn = form.querySelector('.go');
+    btn.disabled = true; btn.textContent = 'Envoi...';
+    fetch('/api/reserve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prenom: p, email: m, type: tp ? tp.value : 'Fluffy', qty: qty, consent: c, website: (document.getElementById('website')||{}).value || '' }) })
+      .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+      .then(function(d){ reserved = (d && typeof d.kits==='number') ? d.kits : reserved + qty; showCount(); done(tp); })
+      .catch(function(){ btn.disabled = false; btn.textContent = 'Je réserve'; setErr('e-ok', 'ok', 'Oups, l’envoi a échoué. Réessaie dans un instant.'); });
+  });
+  function done(tp){
+    document.getElementById('thanksTxt').textContent = 'Kit ' + (tp ? tp.value : '') + ' x' + qty + ' noté. On t’écrit dès que la 1re fournée est lancée. Parle-en à tes copines et copains.';
     form.hidden = true; document.getElementById('thanks').hidden = false;
     confetti();
-  });
+  }
 
   function confetti(){
     if (!on()) return;
