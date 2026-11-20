@@ -3,7 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Le Labo d'Ava</title>
+<title>Le Labo d'Ava | Kits de slime pré-dosés à mélanger, précommande gratuite</title>
+<meta name="description" content="Kits de slime pré-dosés : tu verses, tu mélanges, tu étires. Précommande gratuite à 14,99 €, aucun paiement maintenant. Première fournée à 10 réservations.">
+<link rel="canonical" href="https://avakitsdeslime.fr/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Le Labo d'Ava">
+<meta property="og:title" content="Le Labo d'Ava | Kits de slime pré-dosés">
+<meta property="og:description" content="Tu verses, tu mélanges, tu étires. Précommande gratuite, aucun paiement maintenant.">
+<meta property="og:url" content="https://avakitsdeslime.fr/">
+<meta property="og:image" content="https://avakitsdeslime.fr/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo Ava, Les Kits de Slime, sur fond violet">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2B1250">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@400;500;600;700&display=swap">
@@ -265,7 +279,6 @@ footer p{margin-top:4px;color:var(--soft);font-size:14px}
 <div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M14 36a9 9 0 0 1-1-17.9A11 11 0 0 1 34 15a9 9 0 0 1 1 18z" fill="#FFB3D9" stroke="#2B1250" stroke-width="3" stroke-linejoin="round"/></svg><h3>Fluffy</h3><p>Léger et moelleux, comme un nuage</p><span class="tex" style="background:#FF5CA3">Fluffy</span></div></div>
 <div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><rect x="8" y="16" width="32" height="22" rx="8" fill="#FFE459" stroke="#2B1250" stroke-width="3"/><path d="M14 24h20" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg><h3>Butter</h3><p>Doux et lisse, il s'étale comme du beurre</p><span class="tex" style="background:#FFE459">Butter</span></div></div>
 <div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M24 5C24 5 11 20 11 30a13 13 0 0 0 26 0C37 20 24 5 24 5z" fill="#BFF1FF" stroke="#2B1250" stroke-width="3" stroke-linejoin="round"/><path d="M18 30a6 6 0 0 0 5 6" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/></svg><h3>Clear</h3><p>Transparent et brillant comme du verre</p><span class="tex" style="background:#3CD5FF">Clear</span></div></div>
-<div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="16" cy="18" r="6" fill="#7EEDD5" stroke="#2B1250" stroke-width="3"/><circle cx="32" cy="16" r="6" fill="#FF5CA3" stroke="#2B1250" stroke-width="3"/><circle cx="24" cy="30" r="6" fill="#FFE459" stroke="#2B1250" stroke-width="3"/><circle cx="35" cy="34" r="5" fill="#3CD5FF" stroke="#2B1250" stroke-width="3"/><circle cx="12" cy="35" r="5" fill="#C55DFF" stroke="#2B1250" stroke-width="3"/></svg><h3>Crunchy</h3><p>Avec des perles qui croustillent</p><span class="tex" style="background:#7EEDD5">Crunchy</span></div></div>
 <div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M24 4l5 14 14 6-14 6-5 14-5-14-14-6 14-6z" fill="#C55DFF" stroke="#2B1250" stroke-width="3" stroke-linejoin="round"/></svg><h3>Galaxy</h3><p>Plein de paillettes qui brillent</p><span class="tex" style="background:#C55DFF">Galaxy</span></div></div>
 <div class="card"><div><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M12 40V22a12 12 0 0 1 24 0v18z" fill="#FF8FC4" stroke="#2B1250" stroke-width="3" stroke-linejoin="round"/><circle cx="19" cy="22" r="2.5" fill="#fff"/></svg><h3>Jelly</h3><p>Gélatineux, il rebondit sous les doigts</p><span class="tex" style="background:#FF5CA3">Jelly</span></div></div>
 </div>
@@ -289,7 +302,7 @@ footer p{margin-top:4px;color:var(--soft);font-size:14px}
 <input id="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0">
 <div class="field"><label for="prenom">Ton prénom</label><input id="prenom" type="text" autocomplete="given-name" aria-describedby="e-prenom"><span class="err" id="e-prenom" aria-live="polite"></span></div>
 <div class="field"><label for="email">Ton e-mail (ou celui d'un parent)</label><input id="email" type="email" autocomplete="email" inputmode="email" aria-describedby="e-email"><span class="err" id="e-email" aria-live="polite"></span></div>
-<div class="field"><span class="lab" id="lab-type">Ton type de slime</span><div class="types" role="radiogroup" aria-labelledby="lab-type"><input type="radio" name="type" id="t-fluffy" value="Fluffy" checked><label for="t-fluffy">Fluffy</label><input type="radio" name="type" id="t-butter" value="Butter"><label for="t-butter">Butter</label><input type="radio" name="type" id="t-clear" value="Clear"><label for="t-clear">Clear</label><input type="radio" name="type" id="t-crunchy" value="Crunchy"><label for="t-crunchy">Crunchy</label><input type="radio" name="type" id="t-galaxy" value="Galaxy"><label for="t-galaxy">Galaxy</label><input type="radio" name="type" id="t-jelly" value="Jelly"><label for="t-jelly">Jelly</label></div></div>
+<div class="field"><span class="lab" id="lab-type">Ton type de slime</span><div class="types" role="radiogroup" aria-labelledby="lab-type"><input type="radio" name="type" id="t-fluffy" value="Fluffy" checked><label for="t-fluffy">Fluffy</label><input type="radio" name="type" id="t-butter" value="Butter"><label for="t-butter">Butter</label><input type="radio" name="type" id="t-clear" value="Clear"><label for="t-clear">Clear</label><input type="radio" name="type" id="t-galaxy" value="Galaxy"><label for="t-galaxy">Galaxy</label><input type="radio" name="type" id="t-jelly" value="Jelly"><label for="t-jelly">Jelly</label></div></div>
 <div class="field"><span class="lab" id="lab-qty">Nombre de kits</span><div class="qty" role="group" aria-labelledby="lab-qty"><button type="button" id="minus" aria-label="Retirer un kit">−</button><output id="qty" aria-live="polite">1</output><button type="button" id="plus" aria-label="Ajouter un kit">+</button></div></div>
 <div class="field"><div class="consent"><input id="ok" type="checkbox" aria-describedby="e-ok"><label for="ok">J'accepte d'être contacté(e) par e-mail au sujet de ma réservation. Mes données ne servent qu'à ça.</label></div><span class="err" id="e-ok" aria-live="polite"></span></div>
 <button class="go" type="submit">Je réserve</button>
