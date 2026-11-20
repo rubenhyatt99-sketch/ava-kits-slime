@@ -438,10 +438,11 @@ footer p{margin-top:4px;color:var(--soft);font-size:14px}
     document.getElementById('gaugeTxt').textContent = n + ' / 10 kits réservés. On lance à 10.';
   }
   (function(){
-    var end = new Date('2026-11-25T23:59:59+01:00').getTime();
+    var end = new Date('2026-11-25T23:59:59+01:00').getTime(), end2 = new Date('2026-12-05T23:59:59+01:00').getTime();
     function z(n){ return n < 10 ? '0' + n : '' + n; }
     function tick(){
       var d = end - Date.now();
+      if (d <= 0 && end !== end2 && window.__cl && reserved < 10) { end = end2; document.getElementById('cd').hidden = false; d = end - Date.now(); document.getElementById('cdt').textContent = 'Prolongé jusqu’au 5 décembre'; }
       if (d <= 0) { document.getElementById('cdt').textContent = 'Précommande terminée'; document.getElementById('cd').hidden = true; return; }
       document.getElementById('cd-d').textContent = Math.floor(d / 864e5);
       document.getElementById('cd-h').textContent = z(Math.floor(d % 864e5 / 36e5));
@@ -451,7 +452,7 @@ footer p{margin-top:4px;color:var(--soft);font-size:14px}
     tick(); setInterval(tick, 1000);
   })();
   showCount();
-  fetch('/api/count').then(function(r){return r.json();}).then(function(d){ if (d && typeof d.kits==='number'){ reserved=d.kits; showCount(); } }).catch(function(){});
+  fetch('/api/count').then(function(r){return r.json();}).then(function(d){ if (d && typeof d.kits==='number'){ reserved=d.kits; showCount(); } window.__cl = true; }).catch(function(){});
 
   var form = document.getElementById('form');
   function setErr(id, inp, msg){ document.getElementById(id).textContent = msg; document.getElementById(inp).setAttribute('aria-invalid', msg ? 'true' : 'false'); }
